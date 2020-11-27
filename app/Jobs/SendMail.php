@@ -7,7 +7,7 @@ use Mandrill;
 
 class SendMail extends Job
 {
-    protected $mandrill,$data;
+    protected $data;
     /**
      * Create a new job instance.
      *
@@ -15,7 +15,6 @@ class SendMail extends Job
      */
     public function __construct($data)
     {
-        $this->mandrill = new Mandrill(env('API_KEY_MANDRILL'));
         $this->data = $data;
     }
 
@@ -26,17 +25,19 @@ class SendMail extends Job
      */
     public function handle()
     {
-        $message = new \stdClass();
-        $message->html = $this->data->html ?? '';
-        $message->text = $this->data->text ?? '';
-        $message->subject = $this->data->subject;
-        $message->from_email = $this->data->from_email;
-        $message->from_name  = $this->data->from_name;
-        $message->to = $this->data->to;
-        $message->track_opens = true;
+        $message = array(
+            'text' => '<div>123</div>',
+            'subject' => $this->data->subject,
+            'from_email' => $this->data->from_email,
+            'from_name' => $this->data->from_name,
+            'to' => array(
+                $this->data->to
+            )
+        );
 
         try{
-            $this->mandrill->messages->send($message);
+            $mandrill = new Mandrill(env('API_KEY_MANDRILL'));
+            $mandrill->messages->send($message);
 
         }catch (\Mandrill_Error $exception)
         {
