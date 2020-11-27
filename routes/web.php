@@ -16,4 +16,5 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'v1'], function (){
     Route::post('users', 'UserController@store');
     Route::post('login','Auth\AuthController@login');
+    Route::post('deposit','WalletController@deposit');
 });
