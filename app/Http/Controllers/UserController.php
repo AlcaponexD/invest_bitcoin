@@ -23,6 +23,11 @@ class UserController extends Controller
 
        try{
            $user = User::create($request->all());
+           $user->wallet()->create([
+               'brl_amount' => 0,
+               'btc_amount' => 0
+           ]);
+
            return response()->json([
                'user' => $user,
                'message' => 'created'
