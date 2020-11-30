@@ -4,3 +4,5 @@ Lumen 8
 
 
 php artisan jwt:secret
+
+vendor\bin\phpunit
