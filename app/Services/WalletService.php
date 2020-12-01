@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 use App\Jobs\SendMail;
+use App\Models\Wallets;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Type\Decimal;
 
@@ -48,5 +49,11 @@ class WalletService
         dispatch(new SendMail($mail_data));
 
         return $wallet;
+    }
+    public function balance()
+    {
+         return [
+             'total' =>  $this->user->wallet->brl_amount
+         ];
     }
 }
