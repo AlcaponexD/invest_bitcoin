@@ -15,8 +15,8 @@ class CreateTableHistoricTransactions extends Migration
     {
         Schema::create('historic_transactions', function (Blueprint $table) {
             $table->id();
-            $table->enum('type',['sell','buy']);
-            $table->double('btc_price',19,10);
+            $table->enum('type',['sell','buy','deposit']);
+            $table->double('btc_price',19,10)->nullable();
             $table->double('amount',19,10);
             $table->timestamps();
         });

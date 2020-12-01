@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 use App\Jobs\SendMail;
+use App\Models\TransactionHistoric;
 use App\Models\Wallets;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Type\Decimal;
@@ -29,12 +30,23 @@ class WalletService
         $wallet->brl_amount = ((float)$wallet->brl_amount+(float)$amount->serialize());
         $wallet->save();
 
+        /**
+         * log
+         */
         Log::info('deposit_brl',[
             'old' => (float)$wallet->brl_amount,
             'new' => ((float)$wallet->brl_amount+(float)$amount->serialize()),
             'user_id' => $this->user->id
         ]);
 
+        /**
+         * create historic
+         */
+        TransactionHistoric::create([
+            'user_id' => $this->user->id,
+            'type' => 'deposit',
+            'amount' => $amount->serialize()
+        ]);
 
         /**
          * sendmail

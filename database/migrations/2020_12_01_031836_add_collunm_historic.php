@@ -14,7 +14,7 @@ class AddCollunmHistoric extends Migration
     public function up()
     {
         Schema::table('historic_transactions', function (Blueprint $table) {
-            $table->string('btc_quantity')->after('btc_price');
+            $table->string('btc_quantity')->after('btc_price')->nullable();
         });
     }
 
