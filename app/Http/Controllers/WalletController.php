@@ -43,4 +43,12 @@ class WalletController extends Controller
         $deposit = $this->wallet->deposit($request->all());
         return response()->json($deposit);
     }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function balance()
+    {
+        return response()->json($this->wallet->balance());
+    }
 }
