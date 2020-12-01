@@ -18,6 +18,9 @@ class CoinService
 
     const url = 'https://www.mercadobitcoin.net/api/';
 
+    /**
+     * @return array
+     */
     public function current()
     {
         try{
@@ -31,8 +34,8 @@ class CoinService
             $result = \GuzzleHttp\json_decode($response->getContents());
 
             return [
-                'buy' => $result->ticker->buy,
-                'sell' => $result->ticker->sell
+                'buy' => (float)$result->ticker->buy,
+                'sell' => (float)$result->ticker->sell
             ];
 
         }catch (GuzzleException  $e){

@@ -15,11 +15,20 @@ class TransactionController extends Controller
 {
     private $transaction;
 
+    /**
+     * TransactionController constructor.
+     * @param TransactionService $transactionService
+     */
     public function __construct(TransactionService $transactionService)
     {
         $this->transaction = $transactionService;
+        $this->middleware('auth');
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function buy(Request $request)
     {
         $this->validate($request,[
@@ -28,4 +37,14 @@ class TransactionController extends Controller
 
         return response()->json($this->transaction->buy($request->amount));
     }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function position()
+    {
+        return response()->json($this->transaction->position());
+    }
+
+
 }

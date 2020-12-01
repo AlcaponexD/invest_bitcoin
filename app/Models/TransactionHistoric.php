@@ -17,7 +17,8 @@ class TransactionHistoric extends Model
         'user_id',
         'type',
         'btc_price',
-        'amount'
+        'amount',
+        'btc_quantity'
     ];
 
     /**

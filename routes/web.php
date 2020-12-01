@@ -20,4 +20,5 @@ Route::group(['prefix' => 'v1'], function (){
     Route::get('balance','WalletController@balance');
     Route::get('current','CoinController@current');
     Route::post('buy','TransactionController@buy');
+    Route::get('position','TransactionController@position');
 });

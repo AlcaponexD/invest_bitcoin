@@ -65,6 +65,7 @@ class TransactionService
        TransactionHistoric::create([
            'type' => 'buy',
            'btc_price' => $btc_current['sell'],
+           'btc_quantity' => $btc_purchased,
            'amount' => $amount->serialize(),
            'user_id' => $this->user->id
        ]);
@@ -89,6 +90,26 @@ class TransactionService
             'purchased' => $btc_purchased,
             'current' => $btc_current['sell'],
             'btc_total' => $this->user->wallet->btc_amount
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function position()
+    {
+        $btc_current = $this->coin->current();
+        $last = $this->user->historic->last();
+        $variation =  ($btc_current['sell']/$last->btc_price - 1) * 100;
+        $variation_porcent = $variation * 100;
+
+
+        return [
+            'date_puchased' => $last->created_at,
+            'amount_invested' => $last->amount,
+            'purchase_btc_price' => $last->btc_price,
+            'variation' => (float)number_format($variation_porcent,2,'.',''),
+            'amount_actually' => (float)($btc_current['sell'] * $last->btc_quantity)
         ];
     }
 }
