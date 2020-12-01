@@ -75,4 +75,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return $this->hasOne(Wallets::class);
     }
+
+    public function historic()
+    {
+        return $this->hasMany(TransactionHistoric::class);
+    }
 }

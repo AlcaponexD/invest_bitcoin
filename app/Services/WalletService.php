@@ -35,6 +35,10 @@ class WalletService
             'user_id' => $this->user->id
         ]);
 
+
+        /**
+         * sendmail
+         */
         $mail_data = new \stdClass();
         $mail_data->text = "Você fez um depósito no valor de R$ {$amount->serialize()}";
         $mail_data->subject = "Valor depositado";
