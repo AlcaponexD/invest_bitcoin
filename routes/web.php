@@ -18,4 +18,5 @@ Route::group(['prefix' => 'v1'], function (){
     Route::post('login','Auth\AuthController@login');
     Route::post('deposit','WalletController@deposit');
     Route::get('balance','WalletController@balance');
+    Route::get('current','CoinController@current');
 });

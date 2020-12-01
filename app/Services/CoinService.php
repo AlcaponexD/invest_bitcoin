@@ -16,7 +16,7 @@ class CoinService
 {
 
 
-    const url = 'https://www.mercadobitcoin.net/api';
+    const url = 'https://www.mercadobitcoin.net/api/';
 
     public function current()
     {
@@ -25,16 +25,20 @@ class CoinService
                 'base_uri' => self::url
             ]);
 
-            $r = $client->request('get','/BTC/ticker/');
+            $r = $client->get('BTC/ticker');
 
             $response = $r->getBody();
+            $result = \GuzzleHttp\json_decode($response->getContents());
 
-            return $response->getContents();
+            return [
+                'buy' => $result->ticker->buy,
+                'sell' => $result->ticker->sell
+            ];
 
         }catch (GuzzleException  $e){
             $error = [
                 'error' => true,
-                'message' => $e->getResponse()->getBody()->getContents()
+                'message' => $e->getMessage()
             ];
             Log::info('error_api_mercadobitcoin',$error);
 
