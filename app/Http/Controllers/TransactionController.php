@@ -35,7 +35,11 @@ class TransactionController extends Controller
             'amount' => ['required','integer',new AmountIsPositive]
         ]);
 
-        return response()->json($this->transaction->buy($request->amount));
+        $buy = $this->transaction->buy($request->amount);
+        if (isset($buy['error']))
+            return response()->json($buy,422);
+
+        return response()->json($buy);
     }
 
     /**
@@ -48,7 +52,12 @@ class TransactionController extends Controller
             'amount' => ['required','integer',new AmountIsPositive]
         ]);
 
-        return response()->json($this->transaction->sell($request->amount));
+        $sell = $this->transaction->sell($request->amount);
+
+        if (isset($sell['error']))
+            return response()->json($sell,422);
+
+        return response()->json($sell);
     }
 
     /**
@@ -59,5 +68,17 @@ class TransactionController extends Controller
         return response()->json($this->transaction->position());
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function extract(Request $request)
+    {
+        $this->validate($request,[
+            'interval' => ['integer']
+        ]);
+
+        return response()->json($this->transaction->extract($request));
+    }
 
 }

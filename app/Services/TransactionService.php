@@ -11,6 +11,7 @@ namespace App\Services;
 
 use App\Jobs\SendMail;
 use App\Models\TransactionHistoric;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Type\Decimal;
 
@@ -99,8 +100,8 @@ class TransactionService
     public function position()
     {
         $btc_current = $this->coin->current();
-        $last = $this->user->historic->last();
-        $variation =  ($btc_current['sell']/$last->btc_price - 1) * 100;
+        $last = $this->user->historic->where('type','buy')->last();
+        $variation =  ($btc_current['sell'] - $last->btc_price)  / $last->btc_price;
         $variation_porcent = $variation * 100;
 
 
@@ -174,5 +175,25 @@ class TransactionService
         ];
 
         dispatch(new SendMail($mail_data));
+
+        return [
+            'brl_amount' => $this->user->wallet->brl_amount,
+            'btc_amount' => $this->user->wallet->btc_amount,
+            'btc_current_buy' => (float)$btc_current['buy'],
+            'btc_sell' => $btc_sell,
+
+        ];
+    }
+
+    /**
+     * @param $interval
+     * @return mixed
+     */
+    public function extract($request)
+    {
+        $interval = $request->interval ?? 90;
+        $extract = TransactionHistoric::where('user_id',$this->user->id)->whereDate('created_at', '>', Carbon::now()->subDays($interval))->get();
+
+        return $extract;
     }
 }

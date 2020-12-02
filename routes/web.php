@@ -22,4 +22,5 @@ Route::group(['prefix' => 'v1'], function (){
     Route::post('buy','TransactionController@buy');
     Route::post('sell','TransactionController@sell');
     Route::get('position','TransactionController@position');
+    Route::get('extract','TransactionController@extract');
 });
