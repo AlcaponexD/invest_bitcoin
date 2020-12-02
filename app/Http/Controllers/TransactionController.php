@@ -39,6 +39,19 @@ class TransactionController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sell(Request $request)
+    {
+        $this->validate($request,[
+            'amount' => ['required','integer',new AmountIsPositive]
+        ]);
+
+        return response()->json($this->transaction->sell($request->amount));
+    }
+
+    /**
      * @return \Illuminate\Http\JsonResponse
      */
     public function position()

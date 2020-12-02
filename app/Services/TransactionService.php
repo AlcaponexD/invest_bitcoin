@@ -112,4 +112,67 @@ class TransactionService
             'amount_actually' => (float)($btc_current['sell'] * $last->btc_quantity)
         ];
     }
+
+    public function sell($amount)
+    {
+        $amount = new Decimal($amount);
+        $btc_current = $this->coin->current();
+        $btc_sell = (float)$amount->serialize() / (float)$btc_current['buy'];
+
+        if ($btc_sell > $this->user->wallet->btc_amount)
+            return [
+                'error' => true,
+                'message' => 'Você não tem saldo suficiente para realizar esse saque.'
+            ];
+
+        $new_btc = ((float)$this->user->wallet->btc_amount - (float)$btc_sell);
+        $new_amount = ((float)$this->user->wallet->brl_amount + (float)$amount->serialize());
+
+        /**
+         * Create log
+         */
+        Log::info('transaction_buy',[
+            'old' => [
+                'btc' => $this->user->wallet->btc_amount,
+                'amount' => $this->user->wallet->brl_amount
+            ],
+            'new' => [
+                'btc' => $new_btc,
+                'amount' => $new_amount
+            ],
+            'user_id' => $this->user->id
+        ]);
+
+
+        $this->user->wallet->btc_amount = $new_btc;
+        $this->user->wallet->brl_amount = $new_amount;
+        $this->user->wallet->save();
+
+        /**
+         * create historic
+         */
+        TransactionHistoric::create([
+            'type' => 'sell',
+            'btc_price' => $btc_current['buy'],
+            'btc_quantity' => $btc_sell,
+            'amount' => $amount->serialize(),
+            'user_id' => $this->user->id
+        ]);
+
+        /**
+         * sendmail
+         */
+        $mail_data = new \stdClass();
+        $mail_data->text = "Você resgatou R$ {$amount->serialize()} e vendeu {$btc_sell} bitcon";
+        $mail_data->subject = "Você resgatou valores";
+        $mail_data->from_email = "jeison.contas@gmail.com";
+        $mail_data->from_name = "Jeison Pedroso";
+        $mail_data->to = [
+            'email' => $this->user->email,
+            'name' => $this->user->name,
+            'type' => 'to'
+        ];
+
+        dispatch(new SendMail($mail_data));
+    }
 }
