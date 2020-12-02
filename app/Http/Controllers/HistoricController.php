@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\HistoricBitcoin;
 use App\Services\HistoricService;
 use Illuminate\Http\Request;
 
@@ -35,8 +36,12 @@ class HistoricController extends Controller
         return response()->json($this->historic->extract($request));
     }
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function volume()
     {
         return response()->json($this->historic->volume());
     }
+
 }

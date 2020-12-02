@@ -33,9 +33,13 @@ class HistoricService
         return $extract;
     }
 
+    /**
+     * @return mixed
+     */
     public function volume()
     {
         $volume = TransactionHistoric::where('type','buy')->whereDate('created_at', Carbon::now())->get();
         return $volume;
     }
+
 }
