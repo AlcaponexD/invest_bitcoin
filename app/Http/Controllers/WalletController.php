@@ -9,12 +9,9 @@
 namespace App\Http\Controllers;
 
 
-use App\Jobs\SendMail;
 use App\Rules\AmountIsPositive;
 use App\Services\WalletService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Ramsey\Uuid\Type\Decimal;
 
 class WalletController extends Controller
 {

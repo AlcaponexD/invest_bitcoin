@@ -9,13 +9,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Jobs\SendMail;
-use App\Rules\AmountIsPositive;
 use App\Services\CoinService;
-use App\Services\WalletService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Ramsey\Uuid\Type\Decimal;
 
 class CoinController extends Controller
 {

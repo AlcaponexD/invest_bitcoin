@@ -11,7 +11,6 @@ namespace App\Services;
 
 use App\Jobs\SendMail;
 use App\Models\TransactionHistoric;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Type\Decimal;
 
@@ -183,17 +182,5 @@ class TransactionService
             'btc_sell' => $btc_sell,
 
         ];
-    }
-
-    /**
-     * @param $interval
-     * @return mixed
-     */
-    public function extract($request)
-    {
-        $interval = $request->interval ?? 90;
-        $extract = TransactionHistoric::where('user_id',$this->user->id)->whereDate('created_at', '>', Carbon::now()->subDays($interval))->get();
-
-        return $extract;
     }
 }

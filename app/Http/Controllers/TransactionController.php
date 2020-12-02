@@ -68,17 +68,4 @@ class TransactionController extends Controller
         return response()->json($this->transaction->position());
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function extract(Request $request)
-    {
-        $this->validate($request,[
-            'interval' => ['integer']
-        ]);
-
-        return response()->json($this->transaction->extract($request));
-    }
-
 }
