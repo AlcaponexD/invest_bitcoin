@@ -7,6 +7,7 @@
  */
 
 namespace App\Http\Controllers;
+use App\Rules\AmounMin;
 use App\Rules\AmountIsPositive;
 use App\Services\TransactionService;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class TransactionController extends Controller
     public function buy(Request $request)
     {
         $this->validate($request,[
-            'amount' => ['required','integer',new AmountIsPositive]
+            'amount' => ['required','integer',new AmountIsPositive,new AmounMin]
         ]);
 
         $buy = $this->transaction->buy($request->amount);
@@ -49,7 +50,7 @@ class TransactionController extends Controller
     public function sell(Request $request)
     {
         $this->validate($request,[
-            'amount' => ['required','integer',new AmountIsPositive]
+            'amount' => ['required','integer',new AmountIsPositive,new AmounMin]
         ]);
 
         $sell = $this->transaction->sell($request->amount);
