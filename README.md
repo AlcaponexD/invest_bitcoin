@@ -12,8 +12,11 @@ vendor\bin\phpunit
 #Jobs
 php artisan queue:work
 
+Alterar no dotEnv para  QUEUE_CONNECTION=database
+
 #Adicionar ao DotENV
 API_KEY_MANDRILL="suaKEY"
+
 
 #Link para documentação da api
 https://documenter.getpostman.com/view/10183183/TVmMgxRs
