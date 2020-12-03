@@ -42,8 +42,8 @@ class HistoricService
         $volume_sell = TransactionHistoric::whereDate('created_at', Carbon::now())->where('type','sell')->select(DB::raw('sum(btc_quantity) as btc_sell'))->first();
         $volume_buyed = TransactionHistoric::whereDate('created_at', Carbon::now())->where('type','buy')->select(DB::raw('sum(btc_quantity) as btc_buy'))->first();
         return [
-            $volume_sell->btc_sell,
-            $volume_buyed->btc_buy
+            'total_sell' => $volume_sell->btc_sell,
+            'total_buy' =>$volume_buyed->btc_buy
         ];
     }
 
