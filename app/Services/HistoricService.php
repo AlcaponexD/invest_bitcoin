@@ -11,6 +11,7 @@ namespace App\Services;
 
 use App\Models\TransactionHistoric;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class HistoricService
 {
@@ -38,8 +39,12 @@ class HistoricService
      */
     public function volume()
     {
-        $volume = TransactionHistoric::where('type','buy')->whereDate('created_at', Carbon::now())->get();
-        return $volume;
+        $volume_sell = TransactionHistoric::whereDate('created_at', Carbon::now())->where('type','sell')->select(DB::raw('sum(btc_quantity) as btc_sell'))->first();
+        $volume_buyed = TransactionHistoric::whereDate('created_at', Carbon::now())->where('type','buy')->select(DB::raw('sum(btc_quantity) as btc_buy'))->first();
+        return [
+            $volume_sell->btc_sell,
+            $volume_buyed->btc_buy
+        ];
     }
 
 }
